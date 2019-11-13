@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+<property name="LOG_DIR" value="/opt/api_channel/logs" />
+<property name="LOG_NAME" value="api_channel" />
+
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+	<encoder>
+		<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+		<charset>UTF-8</charset>
+	</encoder>
+</appender>
+
+<appender name="CONTROLLER_INFO"
+		   class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<filter class="ch.qos.logback.classic.filter.LevelFilter">
+		<level>ERROR</level>
+		<onMatch>DENY</onMatch>
+		<onMismatch>ACCEPT</onMismatch>
+	</filter>
+	<file>${LOG_DIR}/${LOG_NAME}_info.log</file>
+	<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<FileNamePattern>${LOG_DIR}/${LOG_NAME}_info.%d{yyyy-MM-dd}.log.zip
+		</FileNamePattern>
+	</rollingPolicy>
+	<encoder>
+		<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+		<charset>UTF-8</charset>
+	</encoder>
+</appender>
+	<appender name="CONTROLLER_ERROR"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<file>${LOG_DIR}/${LOG_NAME}_error.log</file>
+		<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_DIR}/${LOG_NAME}_error.%d{yyyy-MM-dd}.log.zip
+			</FileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+<root level="INFO">
+	<appender-ref ref="STDOUT" />
+</root>
+<logger name="com.sunyur" level="INFO">
+	<appender-ref ref="CONTROLLER_INFO" />
+	<appender-ref ref="CONTROLLER_ERROR" />
+</logger>
+</configuration>
